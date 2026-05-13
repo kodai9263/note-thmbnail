@@ -5,6 +5,7 @@ note アカウント `hikaku9263` の公開記事を確認し、新しい記事�
 ## 使い方
 
 デスクトップの `noteサムネ生成.command` をダブルクリックすると、Codex が一時セッションで起動します。
+起動後に対象の note 記事URLを入力できます。空のまま Enter を押すと、新規記事またはアイキャッチ未設定記事を自動確認します。
 
 ```sh
 ./scripts/run-note-thumbnail.sh
