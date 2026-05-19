@@ -90,8 +90,6 @@ let mainTitle: String
 let subTitle: String
 let lead: String
 let topBadge: String
-let leftPill: String
-let rightPill: String
 let cardA: String
 let cardB: String
 let cardC: String
@@ -104,8 +102,6 @@ if isDataFetch {
     subTitle = "3つの取得パターンを整理してみた"
     lead = "サーバーで取得すると、\n速さ・SEO・安全性を整理しやすい"
     topBadge = "取得パターン"
-    leftPill = "Server: DBに近い"
-    rightPill = "Cache: 再利用"
     cardA = "ORM\nDB直結"
     cardB = "Parallel\n同時取得"
     cardC = "Stream\n順番表示"
@@ -117,8 +113,6 @@ if isDataFetch {
     subTitle = "RSCの使い分けを整理してみた"
     lead = "サーバーで動くものと、\nブラウザで動くものを分けて考える"
     topBadge = "判断基準"
-    leftPill = "Server: 取得・表示"
-    rightPill = "Client: 操作・Hooks"
     cardA = "Server\nComponent"
     cardB = "Client\nComponent"
     cardC = "Boundary\n境界を意識"
@@ -130,8 +124,6 @@ if isDataFetch {
     subTitle = "React初心者メモ"
     lead = "記事の要点を、\nあとから見返しやすく整理する"
     topBadge = "学習メモ"
-    leftPill = "Point: 仕組み"
-    rightPill = "Memo: つまずき"
     cardA = "Before\n疑問"
     cardB = "After\n整理"
     cardC = "Next\n深掘り"
@@ -165,10 +157,6 @@ roundedRect(CGRect(x: 446, y: 315, width: 135, height: 13), radius: 6.5, fill: c
 
 drawText(subTitle, rect: CGRect(x: 75, y: 266, width: 560, height: 44), size: 31, weight: .bold, color: color(0x26362f))
 drawText(lead, rect: CGRect(x: 75, y: 210, width: 560, height: 58), size: 24, weight: .medium, color: color(0x55635e), lineHeight: 31)
-
-roundedRect(CGRect(x: 75, y: 46, width: 510, height: 62), radius: 31, fill: .white.withAlphaComponent(0.92))
-drawPill(leftPill, rect: CGRect(x: 104, y: 59, width: 238, height: 36), fill: color(0xe9e4da), textColor: color(0x60706b), size: 19)
-drawPill(rightPill, rect: CGRect(x: 356, y: 59, width: 205, height: 36), fill: color(0x123b33), textColor: .white, size: 19)
 
 let windowRect = CGRect(x: 672, y: 96, width: 540, height: 477)
 roundedRect(windowRect.offsetBy(dx: 0, dy: -8), radius: 24, fill: color(0x9d907d, alpha: 0.16))
