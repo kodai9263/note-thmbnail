@@ -27,17 +27,38 @@ fi
 echo
 
 if [[ -n "$TARGET_URL" ]]; then
-  PROMPT_INPUT="$(mktemp)"
-  trap 'rm -f "$PROMPT_INPUT"' EXIT
+  METADATA_JSON="$LOG_DIR/last-note.json"
+  node "$PROJECT_DIR/scripts/fetch-note-metadata.mjs" "$TARGET_URL" "$METADATA_JSON"
+
+  HAS_EYECATCH="$(node -e 'const fs=require("fs"); const d=JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(d.eyecatch ? "true" : "false")' "$METADATA_JSON")"
+  TITLE="$(node -e 'const fs=require("fs"); const d=JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(d.title)' "$METADATA_JSON")"
+  NOTE_URL="$(node -e 'const fs=require("fs"); const d=JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(d.url)' "$METADATA_JSON")"
+
+  if [[ "$HAS_EYECATCH" == "true" ]]; then
+    {
+      echo "今回は生成していません。"
+      echo
+      echo "- 保存パス: なし"
+      echo "- 対象記事URL: $NOTE_URL"
+      echo "- 生成しなかった理由: 既にアイキャッチが設定されています。"
+    } | tee "$LAST_OUTPUT"
+    exit 0
+  fi
+
+  OUTPUT_PATH="$(
+    CLANG_MODULE_CACHE_PATH="$PROJECT_DIR/tmp/clang-module-cache" \
+      swift "$PROJECT_DIR/scripts/render-note-thumbnail.swift" "$METADATA_JSON" "$PROJECT_DIR/assets/generated/"
+  )"
+
   {
-    cat "$PROMPT_FILE"
+    echo "サムネイルを生成しました。"
     echo
-    echo "<target_note_url>"
-    echo "$TARGET_URL"
-    echo "</target_note_url>"
-  } > "$PROMPT_INPUT"
-else
-  PROMPT_INPUT="$PROMPT_FILE"
+    echo "- 保存パス: $OUTPUT_PATH"
+    echo "- 対象記事URL: $NOTE_URL"
+    echo "- 記事タイトル: $TITLE"
+    echo "- サムネイルの意図: React初心者メモのシリーズ感に合わせ、記事の要点を右側の概念図で整理しました。"
+  } | tee "$LAST_OUTPUT"
+  exit 0
 fi
 
 "$CODEX_BIN" \
@@ -47,7 +68,7 @@ fi
   --sandbox workspace-write \
   -C "$PROJECT_DIR" \
   -o "$LAST_OUTPUT" \
-  - < "$PROMPT_INPUT"
+  - < "$PROMPT_FILE"
 
 echo
 echo "完了しました。最後の出力: $LAST_OUTPUT"
